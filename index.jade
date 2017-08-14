@@ -12,7 +12,29 @@ html(lang="en")
     link(rel="stylesheet", href="main.css")
   body
     .container
-      
+      h1.text-center Tic Tac Toe
+      main.grid-container
+        .row.a.text-center
+          .col.empty 
+          .col.empty 
+          .col.empty 
+        .row.b.text-center
+          .col.empty 
+          .col.empty 
+          .col.empty 
+        .row.c.text-center
+          .col.empty 
+          .col.empty 
+          .col.empty 
+    
+    .pop-up-window.hidden
+      .wrapper
+        h2.msg-txt.text-uppercase.text-center Choose your side
+        .btn-container
+          .btn-wrapper.btn-left-wrapper
+            .btn-txt.btn-left-txt.text-uppercase X
+          .btn-wrapper.btn-right-wrapper
+            .btn-txt.btn-right-txt.text-uppercase O
               
 
   script(src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous")

@@ -10,7 +10,39 @@
     <link rel="stylesheet" href="main.css"/>
   </head>
   <body>
-    <div class="container"></div>
+    <div class="container">
+      <h1 class="text-center">Tic Tac Toe</h1>
+      <main class="grid-container">
+        <div class="row a text-center">
+          <div class="col empty"> </div>
+          <div class="col empty"> </div>
+          <div class="col empty"> </div>
+        </div>
+        <div class="row b text-center">
+          <div class="col empty"> </div>
+          <div class="col empty"> </div>
+          <div class="col empty"> </div>
+        </div>
+        <div class="row c text-center">
+          <div class="col empty"> </div>
+          <div class="col empty"> </div>
+          <div class="col empty"> </div>
+        </div>
+      </main>
+    </div>
+    <div class="pop-up-window hidden">
+      <div class="wrapper">
+        <h2 class="msg-txt text-uppercase text-center">Choose your side</h2>
+        <div class="btn-container">
+          <div class="btn-wrapper btn-left-wrapper">
+            <div class="btn-txt btn-left-txt text-uppercase">X</div>
+          </div>
+          <div class="btn-wrapper btn-right-wrapper">
+            <div class="btn-txt btn-right-txt text-uppercase">O</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
   <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
