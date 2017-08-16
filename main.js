@@ -20,7 +20,9 @@ $(document).ready(function() {
 
     // Store the used blocks
     playerBlocks: [],
+    playerResult: [0,0,0,0,0,0,0,0],
     computerBlocks: [],
+    computerResult: [0,0,0,0,0,0,0,0],
     usedBlocks: [],
     freeBlocks: [0,1,2,3,4,5,6,7,8],
     winningCombinations: [
@@ -67,16 +69,24 @@ $(document).ready(function() {
     },
 
     // Check if the game is done
-    checkWin: function(side, val) {
+    checkWin: function(side, id) {
       var win = false;
-      var blocks = game[side];
-
-
+      var result = game[side + 'Result'];
+      // Map the winning combination array
+      game.winningCombinations.map(function(combination, index){
+        if (combination.indexOf(Number(id)) !== -1) { // if the clicked block is in a combination
+          result[index] += 1; // increment by 1 the corresponding result
+        }
+      })
+      // When the 3 numbers of a combination are found
+      if (result.indexOf(3) !== -1) {
+        win = true; // set win to true
+      }
 
       // If a side won
-      if (win && side === 'playerBlocks') { // and it's the computer
+      if (win && side === 'player') { // and it's the computer
         game.winningPopup(); // game over
-      } else if (win && side === 'computerBlocks') { // and it's the player
+      } else if (win && side === 'computer') { // and it's the player
         game.gameOverPopup(); // you win
       }
     },
@@ -115,7 +125,9 @@ $(document).ready(function() {
       game.player = '';
       game.computer = '';
       game.playerBlocks = [];
+      game.playerResult = [0,0,0,0,0,0,0,0],
       game.computerBlocks = [];
+      game.computerResult = [0,0,0,0,0,0,0,0],
       game.usedBlocks = [];
       game.freeBlocks = [0,1,2,3,4,5,6,7,8];
     },
@@ -161,8 +173,9 @@ $(document).ready(function() {
       game.playerTurn = !game.playerTurn;
       var id = $(this).attr('id');
       game.updateBlock(id, game.player);
-
       game.manageBlocks(id, 'player');
+
+      game.checkWin('player', id);
 
       game.computerTurn();
     }
