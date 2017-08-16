@@ -10,9 +10,10 @@ $(document).ready(function() {
 
   var game = {
     // Store the state of the game
-    debug: true,
+    debug: false,
     clickable: true,
     playerTurn: Boolean,
+    finished: false,
 
     // Store the symbols of each side
     player: '',
@@ -45,6 +46,7 @@ $(document).ready(function() {
 
     // Manage new block
     manageBlocks: function(id, side) {
+      var id = Number(id);
       // Update the block text
       game.updateBlock(id, side);
 
@@ -68,18 +70,41 @@ $(document).ready(function() {
 
     // Computer turn
     computerTurn: function() {
-      console.log('computer turn');
       if (game.computer === 'X' && game.freeBlocks.indexOf(4) !== -1) {
         game.manageBlocks(4, 'computer');
-        game.manageBlocks(0, 'computer');
-        game.manageBlocks(8, 'computer');
-      } else {
+      } else if (!game.finished){
+        // Find the combination the closest to completion
+        var maxNumber = Math.max.apply(null, game.computerResult);
+        var choicesAvailable = [];
 
+        // Get all possibilities and push them inot choicesAvailable
+        game.computerResult.map(function(number, index){
+          if (number >= 0 && number === maxNumber) {
+            game.winningCombinations[index].map(function(num, i){
+              if (game.freeBlocks.indexOf(num) !== -1) {
+                choicesAvailable.push(num);
+                choicesAvailable.sort();
+              }
+            })
+          } else if (maxNumber < 0) {
+            game.winningCombinations[index].map(function(num, i){
+              if (game.freeBlocks.indexOf(num) !== -1) {
+                choicesAvailable.push(num);
+                choicesAvailable.sort();
+              }
+            })
+          }
+        })
+        var randomChoice = choicesAvailable[Math.floor(Math.random() * choicesAvailable.length)];
+        setTimeout(function () {
+          game.manageBlocks(randomChoice, 'computer');
+        }, 500);
       }
-
-
       // Update playerTurn
-      game.playerTurn = true;
+      setTimeout(function () {
+        game.playerTurn = true;
+      }, 600);
+
     },
 
     // Check if the game is done
@@ -98,9 +123,14 @@ $(document).ready(function() {
       }
       // If a side won
       if (win && side === 'player') { // and it's the computer
+        game.finished = true;
         game.winningPopup(); // game over
       } else if (win && side === 'computer') { // and it's the player
+        game.finished = true;
         game.gameOverPopup(); // you win
+      } else if (!win && game.freeBlocks.length === 0) { // If there are no block left and no one won
+        game.finished = true;
+        game.tiePopup();
       }
     },
 
@@ -113,6 +143,7 @@ $(document).ready(function() {
       btnRightEl.text(right);
     },
     tiePopup: function() {
+      game.togglePopup();
       popupEl.attr('id', 'tie');
       game.updatePopup('It\'s a tie!', 'Stop', 'Play again');
     },
@@ -135,6 +166,7 @@ $(document).ready(function() {
       blocks.text('');
       blocks.removeClass('used');
       // Reset the stored data
+      game.finished = false;
       game.playerTurn = Boolean;
       game.player = '';
       game.computer = '';
@@ -184,17 +216,20 @@ $(document).ready(function() {
     if (!game.playerTurn || !game.clickable || this.className.indexOf('used') !== -1) {
       return null // do nothing
     } else {
-      console.log('my turn');
       game.playerTurn = !game.playerTurn;
       var id = $(this).attr('id');
-
       game.manageBlocks(id, 'player');
-
+      // Map the winning combination array
+      game.winningCombinations.map(function(combination, index){
+        if (combination.indexOf(Number(id)) !== -1) { // if the clicked block is in a combination
+          game.computerResult[index] -= 10; // decrease by 10 this combination score in computerResult
+        }
+      })
       game.computerTurn();
     }
   })
 
-
+// Debug function
 if (game.debug) {
   btnEl.addClass('debug');
   blocks.addClass('debug');
