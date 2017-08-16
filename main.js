@@ -6,27 +6,33 @@ $(document).ready(function() {
   var btnLeftEl = $('.btn-left-txt');
   var btnEl = $('.btn-txt');
   var board = $('main.grid-container');
-  var space = $('.col');
+  var blocks = $('.col');
 
   var game = {
     // Store the state of the game
     debug: true,
     clickable: true,
+    playerTurn: Boolean,
 
     // Store the symbols of each side
     player: '',
     computer: '',
 
+    // Update the block text
+    updateBlock: function(el, side) {
+      console.log(el);
+      el.text(side);
+      el.addClass('used');
+    },
+
     togglePopup: function() {
       popupEl.toggleClass('hidden');
     },
-
     updatePopup: function(msg, left, right) {
       popupMsgEl.text(msg);
       btnLeftEl.text(left);
       btnRightEl.text(right);
     },
-
     tiePopup: function() {
       popupEl.attr('id', 'tie');
       game.updatePopup('It\'s a tie!', 'Stop', 'Play again');
@@ -42,7 +48,8 @@ $(document).ready(function() {
     reset: function() {
       game.updatePopup('Choose your side', 'X', 'O');
       game.togglePopup();
-      space.text('');
+      blocks.text('');
+      blocks.removeClass('used');
     },
     stop: function() {
       game.togglePopup();
@@ -61,9 +68,11 @@ $(document).ready(function() {
       game.player = choice; // store the player choice in the game object
       if (choice === 'O') { // and give opposite side to the computer
         // computer should start
+        game.playerTurn = false;
         game.computer = 'X';
       } else {
         // player should start
+        game.playerTurn = true;
         game.computer = 'O';
       }
     } else { // If it's another popup
@@ -75,10 +84,23 @@ $(document).ready(function() {
     }
   })
 
+  // Blocks click hanlder
+  blocks.on('click', function() {
+    // If it's not the player turn or the block is already used
+    if (!game.playerTurn || !game.clickable || this.className.indexOf('used') !== -1) {
+      return null // do nothing
+    } else {
+      //console.log(this.dataset.col, this.dataset.row);
+      game.updateBlock($(this), game.player);
+      console.log(this.className);
+
+    }
+  })
+
 
 if (game.debug) {
   btnEl.addClass('debug');
-  space.addClass('debug');
+  blocks.addClass('debug');
   $('.debug').on('click', function(){
     console.log(game);
   })

@@ -505,7 +505,7 @@ body {
     transition: all 200ms ease-in-out; }
     body .container main .row .col.empty:hover {
       background-color: #354b60; }
-    body .container main .row .col.full:hover {
+    body .container main .row .col.used:hover {
       cursor: not-allowed;
       background-color: rgba(192, 57, 43, 0.2); }
   body .pop-up-window .wrapper .btn-container .btn-wrapper:hover {
