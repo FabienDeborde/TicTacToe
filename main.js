@@ -19,11 +19,14 @@ $(document).ready(function() {
     computer: '',
 
     // Store the used blocks
-    playerBlocks: [[], [], []],
-    computerBlocks: [[], [], []],
+    playerBlocks: '',
+    computerBlocks: '',
+    usedBlocks: '',
+    freeBlocks: '',
 
     // Update the block text
-    updateBlock: function(el, side) {
+    updateBlock: function(id, side) {
+      var el = $('#' + id);
       el.text(side);
       el.addClass('used');
     },
@@ -38,25 +41,15 @@ $(document).ready(function() {
 
     // Check if the game is done
     checkWin: function(side, val) {
-      console.log(val);
-      var count = 0;
-      game[side].map(function(row){ // Map through the used blocks array
-        if (row.length === 3) { // if there is a line
-          game.winningPopup(); // you win
-        } else if (row.indexOf(val) !== -1) { // if there is element in the same column
-          count += 1 // add 1 to the counter
-        }
-      });
-      if (count === 3) { // if there is a full column
-        game.winningPopup(); // you win
-      };
-      if (game[side][0].indexOf('a') !== -1 && game[side][1].indexOf('b') !== -1 && game[side][2].indexOf('c') !== -1 ) {
-        game.winningPopup(); // you win
-      }
-      if (game[side][0].indexOf('c') !== -1 && game[side][1].indexOf('b') !== -1 && game[side][2].indexOf('a') !== -1 ) {
-        game.winningPopup(); // you win
-      }
+      var win = false;
 
+
+      // If a side won
+      if (win && side === 'playerBlocks') { // and it's the computer
+        game.winningPopup(); // game over
+      } else if (win && side === 'computerBlocks') { // and it's the player
+        game.gameOverPopup(); // you win
+      }
     },
 
     togglePopup: function() {
@@ -72,7 +65,6 @@ $(document).ready(function() {
       game.updatePopup('It\'s a tie!', 'Stop', 'Play again');
     },
     winningPopup: function() {
-      console.log('win');
       game.togglePopup();
       popupEl.attr('id', 'win');
       game.updatePopup('You won!', 'Stop', 'Play again');
@@ -93,8 +85,10 @@ $(document).ready(function() {
       game.playerTurn = Boolean;
       game.player = '';
       game.computer = '';
-      game.playerBlocks = [[], [], []];
-      game.computerBlocks = [[], [], []];
+      game.playerBlocks = '';
+      game.computerBlocks = '';
+      game.usedBlocks = '';
+      game.freeBlocks = '';
     },
     stop: function() {
       game.clickable = false;
@@ -136,11 +130,9 @@ $(document).ready(function() {
       return null // do nothing
     } else {
       game.playerTurn = !game.playerTurn;
-      game.playerBlocks[this.dataset.row].push(this.dataset.col);
-      game.playerBlocks[this.dataset.row].sort();
-      game.updateBlock($(this), game.player);
+      var id = $(this).attr('id');
+      game.updateBlock(id, game.player);
 
-      game.checkWin('playerBlocks', this.dataset.col);
       game.computerTurn();
     }
   })

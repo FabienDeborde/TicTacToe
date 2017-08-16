@@ -508,6 +508,8 @@ body {
     body .container main .row .col.used:hover {
       cursor: not-allowed;
       background-color: rgba(192, 57, 43, 0.2); }
+    body .container main .row .col.possible {
+      background-color: rgba(57, 192, 43, 0.2); }
   body .pop-up-window .wrapper .btn-container .btn-wrapper:hover {
     background-color: #ecf0f1;
     color: #2c3e50; } }
