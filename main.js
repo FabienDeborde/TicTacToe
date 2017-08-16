@@ -29,13 +29,25 @@ $(document).ready(function() {
     },
 
     // Check if the game is done
-    checkWin: function(side) {
-      game[side].map(function(row){
-        console.log(row.length);
-        if (row.length === 3) {
-          game.winningPopup();
+    checkWin: function(side, val) {
+      console.log(val);
+      var count = 0;
+      game[side].map(function(row){ // Map through the used blocks array
+        if (row.length === 3) { // if there is a line
+          game.winningPopup(); // you win
+        } else if (row.indexOf(val) !== -1) { // if there is element in the same column
+          count += 1 // add 1 to the counter
         }
-      })
+      });
+      if (count === 3) { // if there is a full column
+        game.winningPopup(); // you win
+      };
+      if (game[side][0].indexOf('a') !== -1 && game[side][1].indexOf('b') !== -1 && game[side][2].indexOf('c') !== -1 ) {
+        game.winningPopup(); // you win
+      }
+      if (game[side][0].indexOf('c') !== -1 && game[side][1].indexOf('b') !== -1 && game[side][2].indexOf('a') !== -1 ) {
+        game.winningPopup(); // you win
+      }
 
     },
 
@@ -118,7 +130,7 @@ $(document).ready(function() {
       game.playerBlocks[this.dataset.row].sort();
       game.updateBlock($(this), game.player);
 
-      game.checkWin('playerBlocks');
+      game.checkWin('playerBlocks', this.dataset.col);
     }
   })
 
