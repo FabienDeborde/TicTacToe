@@ -18,11 +18,25 @@ $(document).ready(function() {
     player: '',
     computer: '',
 
+    // Store the used blocks
+    playerBlocks: [[], [], []],
+    computerBlocks: [[], [], []],
+
     // Update the block text
     updateBlock: function(el, side) {
-      console.log(el);
       el.text(side);
       el.addClass('used');
+    },
+
+    // Check if the game is done
+    checkWin: function(side) {
+      game[side].map(function(row){
+        console.log(row.length);
+        if (row.length === 3) {
+          game.winningPopup();
+        }
+      })
+
     },
 
     togglePopup: function() {
@@ -38,6 +52,8 @@ $(document).ready(function() {
       game.updatePopup('It\'s a tie!', 'Stop', 'Play again');
     },
     winningPopup: function() {
+      console.log('win');
+      game.togglePopup();
       popupEl.attr('id', 'win');
       game.updatePopup('You won!', 'Stop', 'Play again');
     },
@@ -46,13 +62,20 @@ $(document).ready(function() {
       game.updatePopup('Game over', 'Stop', 'Retry');
     },
     reset: function() {
+      // Reset the popup window
+      popupEl.attr('id', 'side');
       game.updatePopup('Choose your side', 'X', 'O');
       game.togglePopup();
+      // Clear the board
       blocks.text('');
       blocks.removeClass('used');
+      // Reset the stored data
+      game.player = '';
+      game.computer = '';
+      game.playerBlocks = [[], [], []];
+      game.computerBlocks = [[], [], []];
     },
     stop: function() {
-      game.togglePopup();
       game.clickable = false;
     }
   }
@@ -91,9 +114,11 @@ $(document).ready(function() {
       return null // do nothing
     } else {
       //console.log(this.dataset.col, this.dataset.row);
+      game.playerBlocks[this.dataset.row].push(this.dataset.col);
+      game.playerBlocks[this.dataset.row].sort();
       game.updateBlock($(this), game.player);
-      console.log(this.className);
 
+      game.checkWin('playerBlocks');
     }
   })
 
