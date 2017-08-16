@@ -39,29 +39,43 @@ $(document).ready(function() {
     // Update the block text
     updateBlock: function(id, side) {
       var el = $('#' + id);
-      el.text(side);
+      el.text(game[side]);
       el.addClass('used');
     },
 
     // Manage new block
     manageBlocks: function(id, side) {
-      var blocks = side + 'Blocks';
+      // Update the block text
+      game.updateBlock(id, side);
+
       // Add the new block to the corresponding array
+      var blocks = side + 'Blocks';
       game[blocks].push(id);
       game[blocks].sort();
+
       // Add the new block to the used array
       game.usedBlocks.push(id);
       game.usedBlocks.sort();
+
       // Delete from free array the new block
       var index = game.freeBlocks.indexOf(Number(id));
       game.freeBlocks.splice(index, 1);
+
+      //Check if someone won
+      game.checkWin(id, side);
 
     },
 
     // Computer turn
     computerTurn: function() {
       console.log('computer turn');
-      var availableBlocks = [];
+      if (game.computer === 'X' && game.freeBlocks.indexOf(4) !== -1) {
+        game.manageBlocks(4, 'computer');
+        game.manageBlocks(0, 'computer');
+        game.manageBlocks(8, 'computer');
+      } else {
+
+      }
 
 
       // Update playerTurn
@@ -69,7 +83,7 @@ $(document).ready(function() {
     },
 
     // Check if the game is done
-    checkWin: function(side, id) {
+    checkWin: function(id, side) {
       var win = false;
       var result = game[side + 'Result'];
       // Map the winning combination array
@@ -82,7 +96,6 @@ $(document).ready(function() {
       if (result.indexOf(3) !== -1) {
         win = true; // set win to true
       }
-
       // If a side won
       if (win && side === 'player') { // and it's the computer
         game.winningPopup(); // game over
@@ -109,6 +122,7 @@ $(document).ready(function() {
       game.updatePopup('You won!', 'Stop', 'Play again');
     },
     gameOverPopup: function() {
+      game.togglePopup();
       popupEl.attr('id', 'gameover');
       game.updatePopup('Game over', 'Stop', 'Retry');
     },
@@ -170,12 +184,11 @@ $(document).ready(function() {
     if (!game.playerTurn || !game.clickable || this.className.indexOf('used') !== -1) {
       return null // do nothing
     } else {
+      console.log('my turn');
       game.playerTurn = !game.playerTurn;
       var id = $(this).attr('id');
-      game.updateBlock(id, game.player);
-      game.manageBlocks(id, 'player');
 
-      game.checkWin('player', id);
+      game.manageBlocks(id, 'player');
 
       game.computerTurn();
     }
