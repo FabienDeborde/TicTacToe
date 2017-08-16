@@ -19,10 +19,20 @@ $(document).ready(function() {
     computer: '',
 
     // Store the used blocks
-    playerBlocks: '',
+    playerBlocks: [],
     computerBlocks: '',
-    usedBlocks: '',
-    freeBlocks: '',
+    usedBlocks: [],
+    freeBlocks: [0,1,2,3,4,5,6,7,8],
+    winningCombinations: [
+      [0,1,2],
+      [0,3,6],
+      [0,4,8],
+      [1,4,7],
+      [2,5,8],
+      [2,4,6],
+      [3,4,5],
+      [6,7,8]
+    ],
 
     // Update the block text
     updateBlock: function(id, side) {
@@ -31,9 +41,26 @@ $(document).ready(function() {
       el.addClass('used');
     },
 
+    // Manage new block
+    manageBlocks: function(id, side) {
+      var blocks = side + 'Blocks';
+      // Add the new block to the corresponding array
+      game[blocks].push(id);
+      game[blocks].sort();
+      // Add the new block to the used array
+      game.usedBlocks.push(id);
+      game.usedBlocks.sort();
+      // Delete from free array the new block
+      var index = game.freeBlocks.indexOf(Number(id));
+      game.freeBlocks.splice(index, 1);
+
+    },
+
     // Computer turn
     computerTurn: function() {
       console.log('computer turn');
+      var availableBlocks = [];
+
 
       // Update playerTurn
       game.playerTurn = true;
@@ -42,6 +69,8 @@ $(document).ready(function() {
     // Check if the game is done
     checkWin: function(side, val) {
       var win = false;
+      var blocks = game[side];
+
 
 
       // If a side won
@@ -132,6 +161,8 @@ $(document).ready(function() {
       game.playerTurn = !game.playerTurn;
       var id = $(this).attr('id');
       game.updateBlock(id, game.player);
+
+      game.manageBlocks(id, 'player');
 
       game.computerTurn();
     }
