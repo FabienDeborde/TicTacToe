@@ -28,6 +28,14 @@ $(document).ready(function() {
       el.addClass('used');
     },
 
+    // Computer turn
+    computerTurn: function() {
+      console.log('computer turn');
+
+      // Update playerTurn
+      game.playerTurn = true;
+    },
+
     // Check if the game is done
     checkWin: function(side, val) {
       console.log(val);
@@ -82,6 +90,7 @@ $(document).ready(function() {
       blocks.text('');
       blocks.removeClass('used');
       // Reset the stored data
+      game.playerTurn = Boolean;
       game.player = '';
       game.computer = '';
       game.playerBlocks = [[], [], []];
@@ -105,6 +114,7 @@ $(document).ready(function() {
         // computer should start
         game.playerTurn = false;
         game.computer = 'X';
+        game.computerTurn();
       } else {
         // player should start
         game.playerTurn = true;
@@ -125,12 +135,13 @@ $(document).ready(function() {
     if (!game.playerTurn || !game.clickable || this.className.indexOf('used') !== -1) {
       return null // do nothing
     } else {
-      //console.log(this.dataset.col, this.dataset.row);
+      game.playerTurn = !game.playerTurn;
       game.playerBlocks[this.dataset.row].push(this.dataset.col);
       game.playerBlocks[this.dataset.row].sort();
       game.updateBlock($(this), game.player);
 
       game.checkWin('playerBlocks', this.dataset.col);
+      game.computerTurn();
     }
   })
 
