@@ -486,12 +486,15 @@ body {
         -ms-flex-pack: center;
         justify-content: center; }
         body .pop-up-window .wrapper .btn-container .btn-wrapper {
-          padding: 10px 30px;
           border: 1px solid #ecf0f1;
           border-radius: 4px;
           margin: 0 30px;
           cursor: pointer;
           font-size: 2rem; }
+          body .pop-up-window .wrapper .btn-container .btn-wrapper .btn-txt {
+            padding: 10px 30px;
+            width: 100%;
+            height: 100%; }
 
 @media only screen and (max-width: 575px) {
   html {
