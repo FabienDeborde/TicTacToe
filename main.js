@@ -20,7 +20,7 @@ $(document).ready(function() {
 
     // Store the used blocks
     playerBlocks: [],
-    computerBlocks: '',
+    computerBlocks: [],
     usedBlocks: [],
     freeBlocks: [0,1,2,3,4,5,6,7,8],
     winningCombinations: [
@@ -114,10 +114,10 @@ $(document).ready(function() {
       game.playerTurn = Boolean;
       game.player = '';
       game.computer = '';
-      game.playerBlocks = '';
-      game.computerBlocks = '';
-      game.usedBlocks = '';
-      game.freeBlocks = '';
+      game.playerBlocks = [];
+      game.computerBlocks = [];
+      game.usedBlocks = [];
+      game.freeBlocks = [0,1,2,3,4,5,6,7,8];
     },
     stop: function() {
       game.clickable = false;
