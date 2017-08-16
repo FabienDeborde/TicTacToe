@@ -11,6 +11,7 @@ $(document).ready(function() {
   var game = {
     // Store the state of the game
     debug: true,
+    clickable: true,
 
     // Store the symbols of each side
     player: '',
@@ -37,30 +38,41 @@ $(document).ready(function() {
     gameOverPopup: function() {
       popupEl.attr('id', 'gameover');
       game.updatePopup('Game over', 'Stop', 'Retry');
+    },
+    reset: function() {
+      game.updatePopup('Choose your side', 'X', 'O');
+      game.togglePopup();
+      space.text('');
+    },
+    stop: function() {
+      game.togglePopup();
+      game.clickable = false;
     }
   }
 
-
-  game.togglePopup();
-
-
+  // Popup buttons click handler
   btnEl.on('click', function(){
+    // Store the player choice and close the popup
     var choice = '';
     choice = $(this)[0].textContent;
     game.togglePopup();
 
-    if (popupEl.attr('id') === 'side') {
-      game.player = choice;
-      if (choice === 'O') {
+    if (popupEl.attr('id') === 'side') { // If it's the side choosing popup,
+      game.player = choice; // store the player choice in the game object
+      if (choice === 'O') { // and give opposite side to the computer
+        // computer should start
         game.computer = 'X';
       } else {
+        // player should start
         game.computer = 'O';
       }
-    } else {
-
+    } else { // If it's another popup
+      if (choice === 'Stop') { // If the player choose to stop
+        game.stop(); // stop the game
+      } else {
+        game.reset(); // reset the game
+      }
     }
-
-    console.log(choice);
   })
 
 
